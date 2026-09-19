@@ -64,7 +64,6 @@ export default function App() {
       const { data, error } = await supabase
         .from('vocab_items')
         .select('*')
-        .order('created_at', { ascending: false })
         .order('word_group', { ascending: true });
 
       if (error) {
