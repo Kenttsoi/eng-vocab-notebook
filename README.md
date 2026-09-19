@@ -1,75 +1,35 @@
-# React + TypeScript + Vite
+# 📚 VocabNotebook — Developer Edition
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, developer-focused personal vocabulary and collocation dashboard built with React, TypeScript, Tailwind CSS, and Supabase.
 
-Currently, two official plugins are available:
+Designed with a dark-mode, IDE-inspired aesthetic (Linear / Notion style), **VocabNotebook** helps engineers, researchers, and language learners systematically organize words, word families (parts of speech), collocations, and tags—with zero-latency client-side search and virtualized rendering for 10,000+ entries.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **🎨 Minimalist Developer UI**: Clean, high-density dark mode with explicit color-coded parts of speech:
+  - 🔵 **Noun** (Blue)
+  - 🔴 **Verb** (Red)
+  - 🟢 **Adjective** (Green)
+  - 🟣 **Adverb** (Purple)
+- **⚡ High-Performance Virtualization**: Powered by `@tanstack/react-virtual` to render only visible DOM nodes, ensuring smooth 60 FPS scrolling even with 10,000+ entries.
+- **☁️ Cloud Sync via Supabase**: Full CRUD operations backed by a PostgreSQL database in the cloud.
+- **🔤 Automatic Alphabetical Ordering**: Items and Word Groups are ordered strictly A–Z (`word_group ASC`).
+- **⌨️ Keyboard Hotkeys**:
+  - `⌘K` / `Ctrl+K`: Jump directly to global search.
+  - `N`: Open the "Add New Word" modal.
+- **🏷️ Tag Filtering & Collapsible Groups**: Group words by semantic categories (e.g., *Mystery & Ambiguity*) with instant tag filtering (`#writing`, `#formal`).
+- **🖥️ Wide-Screen & Responsive Layout**: Responsive container expanding up to `1800px` to leverage ultra-wide monitor real estate.
+- **✨ Markdown Collocations**: Supports bold syntax (`**key word**`) for key phrase emphasis.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Frontend**: React 19, TypeScript, Vite
+- **Styling**: Tailwind CSS, Lucide React (Icons)
+- **Database**: Supabase (PostgreSQL)
+- **Virtualization**: `@tanstack/react-virtual`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+---
