@@ -27,6 +27,7 @@ export type VocabItem = {
   adj: string;
   verb: string;
   adv: string;
+  antonyms: string;
   collocations: string;
   tags: string[];
 };
@@ -53,6 +54,7 @@ export default function App() {
   const [formAdj, setFormAdj] = useState('');
   const [formVerb, setFormVerb] = useState('');
   const [formAdv, setFormAdv] = useState('');
+  const [formAntonyms, setFormAntonyms] = useState('');
   const [formCollocations, setFormCollocations] = useState('');
   const [formTags, setFormTags] = useState<string[]>([]);
 
@@ -78,6 +80,7 @@ export default function App() {
           adj: item.adj || '',
           verb: item.verb || '',
           adv: item.adv || '',
+          antonyms: item.antonyms || '',
           collocations: item.collocations || '',
           tags: item.tags || [],
         }));
@@ -132,6 +135,7 @@ export default function App() {
     setFormAdj('');
     setFormVerb('');
     setFormAdv('');
+    setFormAntonyms('');
     setFormCollocations('');
     setFormTags(['P1']);
     setIsModalOpen(true);
@@ -145,6 +149,7 @@ export default function App() {
     setFormAdj(item.adj);
     setFormVerb(item.verb);
     setFormAdv(item.adv);
+    setFormAntonyms(item.antonyms);
     setFormCollocations(item.collocations);
     setFormTags(item.tags);
     setIsModalOpen(true);
@@ -162,6 +167,7 @@ export default function App() {
       adj: formAdj,
       verb: formVerb,
       adv: formAdv,
+      antonyms: formAntonyms,
       collocations: formCollocations,
       tags: formTags,
     };
@@ -217,6 +223,7 @@ export default function App() {
         item.adj.toLowerCase().includes(query) ||
         item.verb.toLowerCase().includes(query) ||
         item.adv.toLowerCase().includes(query) ||
+        item.antonyms.toLowerCase().includes(query) ||
         item.collocations.toLowerCase().includes(query);
 
       const matchesTags =
@@ -279,7 +286,7 @@ export default function App() {
       {/* Header Bar */}
       <header className="sticky top-0 z-40 bg-[#141517] border-b border-[#222429] px-4 py-3">
         <div className="max-w-[1800px] 7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          
+
           {/* Brand Title */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
             <div className="flex items-center gap-2">
@@ -343,10 +350,10 @@ export default function App() {
 
       {/* Main Content */}
       <main className="max-w-[1800px] mx-auto px-4 py-6">
-        
+
         {/* Controls Bar */}
         <div className="bg-[#141517] border border-[#222429] rounded-lg p-3 mb-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-          
+
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <div className="flex items-center gap-1.5 text-sm text-gray-400 mr-2">
               <Filter className="w-3.5 h-3.5 text-gray-500" />
@@ -363,11 +370,10 @@ export default function App() {
                       isSelected ? prev.filter((t) => t !== tag) : [...prev, tag]
                     )
                   }
-                  className={`px-2 py-0.5 rounded text-[11px] font-mono transition-all border cursor-pointer ${
-                    isSelected
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono transition-all border cursor-pointer ${isSelected
                       ? 'bg-blue-600/20 border-blue-500/40 text-blue-300'
                       : 'bg-[#18191C] border-[#26282E] text-gray-400 hover:text-gray-200 hover:border-gray-700'
-                  }`}
+                    }`}
                 >
                   #{tag}
                 </button>
@@ -413,6 +419,7 @@ export default function App() {
                   <th className="py-2.5 px-3 text-red-400 w-[11%]">Verb</th>
                   <th className="py-2.5 px-3 text-teal-400 w-[11%]">Adj</th>
                   <th className="py-2.5 px-3 text-purple-400 w-[11%]">Adv</th>
+                  <th className="py-2.5 px-4 text-gray-400 w-[15%]">Antonyms</th>
                   <th className="py-2.5 px-4 text-gray-400 w-[24%]">Collocations & Usage</th>
                   <th className="py-2.5 px-4 text-gray-400 w-[10%] text-right">Tags / Actions</th>
                 </tr>
@@ -486,6 +493,10 @@ export default function App() {
 
                               <td className="py-3 px-3 text-sm font-mono text-purple-400 align-top">
                                 {row.adv || <span className="text-gray-600">—</span>}
+                              </td>
+
+                              <td className="py-3 px-3 align-top">
+                                {row.antonyms || <span className="text-gray-600">—</span>}
                               </td>
 
                               <td className="py-3 px-4 align-top">
@@ -563,7 +574,7 @@ export default function App() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-[#141517] border border-[#26282E] w-full max-w-xl rounded-lg shadow-2xl overflow-hidden">
-            
+
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#222429] bg-[#18191C]">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-blue-400" />
@@ -651,7 +662,7 @@ export default function App() {
                       className="w-full bg-[#18191C] border border-[#26282E] focus:border-teal-500 focus:outline-none rounded px-2.5 py-1 text-sm text-teal-400 font-mono"
                     />
                   </div>
-                  
+
                   <div>
                     <span className="block text-[10px] font-mono text-purple-400 mb-0.5">Adverb</span>
                     <input
@@ -663,6 +674,17 @@ export default function App() {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-amber-400 mb-1">Antonyms</label>
+                <input
+                  type="text"
+                  placeholder="e.g. clear, explicit"
+                  value={formAntonyms}
+                  onChange={(e) => setFormAntonyms(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-1.5 text-sm text-zinc-100 focus:outline-none focus:border-amber-500"
+                />
               </div>
 
               <div>
@@ -694,11 +716,10 @@ export default function App() {
                             isChecked ? prev.filter((t) => t !== tag) : [...prev, tag]
                           )
                         }
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 border transition-colors cursor-pointer ${
-                          isChecked
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 border transition-colors cursor-pointer ${isChecked
                             ? 'bg-blue-600/30 border-blue-500 text-blue-300'
                             : 'bg-[#1E2024] border-[#2C2E33] text-gray-400 hover:text-gray-200'
-                        }`}
+                          }`}
                       >
                         {isChecked && <Check className="w-2.5 h-2.5" />}
                         #{tag}
