@@ -416,10 +416,10 @@ export default function App() {
                 <tr className="bg-[#1A1C1F] border-b border-[#222429] text-[11px] font-mono tracking-wider uppercase">
                   <th className="py-2.5 px-4 text-gray-400 w-[22%]">Meaning Group</th>
                   <th className="py-2.5 px-3 text-blue-400 w-[11%]">Noun</th>
-                  <th className="py-2.5 px-3 text-red-400 w-[11%]">Verb</th>
+                  <th className="py-2.5 px-3 text-amber-400 w-[11%]">Verb</th>
                   <th className="py-2.5 px-3 text-teal-400 w-[11%]">Adj</th>
                   <th className="py-2.5 px-3 text-purple-400 w-[11%]">Adv</th>
-                  <th className="py-2.5 px-4 text-gray-400 w-[15%]">Antonyms</th>
+                  <th className="py-2.5 px-4 text-red-400 w-[15%]">Antonyms</th>
                   <th className="py-2.5 px-4 text-gray-400 w-[24%]">Collocations & Usage</th>
                   <th className="py-2.5 px-4 text-gray-400 w-[10%] text-right">Tags / Actions</th>
                 </tr>
@@ -483,7 +483,7 @@ export default function App() {
                                 {row.noun || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-red-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-amber-400 align-top">
                                 {row.verb || <span className="text-gray-600">—</span>}
                               </td>
 
@@ -495,7 +495,7 @@ export default function App() {
                                 {row.adv || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-red-400 align-top">
                                 {row.antonyms || <span className="text-gray-600">—</span>}
                               </td>
 
@@ -634,8 +634,8 @@ export default function App() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   <div>
                     <span className="block text-[10px] font-mono text-blue-400 mb-0.5">Noun</span>
-                    <input
-                      type="text"
+                    <textarea
+                      rows={3}
                       value={formNoun}
                       onChange={(e) => setFormNoun(e.target.value)}
                       placeholder="mystery"
@@ -643,19 +643,19 @@ export default function App() {
                     />
                   </div>
                   <div>
-                    <span className="block text-[10px] font-mono text-red-400 mb-0.5">Verb</span>
+                    <span className="block text-[10px] font-mono text-amber-400 mb-0.5">Verb</span>
                     <input
                       type="text"
                       value={formVerb}
                       onChange={(e) => setFormVerb(e.target.value)}
                       placeholder="mystify"
-                      className="w-full bg-[#18191C] border border-[#26282E] focus:border-red-500 focus:outline-none rounded px-2.5 py-1 text-sm text-red-400 font-mono"
+                      className="w-full bg-[#18191C] border border-[#26282E] focus:border-amber-500 focus:outline-none rounded px-2.5 py-1 text-sm text-amber-400 font-mono"
                     />
                   </div>
                   <div>
                     <span className="block text-[10px] font-mono text-teal-400 mb-0.5">Adjective</span>
-                    <input
-                      type="text"
+                    <textarea
+                      rows={3}
                       value={formAdj}
                       onChange={(e) => setFormAdj(e.target.value)}
                       placeholder="mysterious"
@@ -677,13 +677,13 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-amber-400 mb-1">Antonyms</label>
-                <input
-                  type="text"
+                <label className="block text-xs font-medium text-red-400 mb-1">Antonyms</label>
+                <textarea
+                  rows={2}
                   placeholder="e.g. clear, explicit"
                   value={formAntonyms}
                   onChange={(e) => setFormAntonyms(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-1.5 text-sm text-zinc-100 focus:outline-none focus:border-amber-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-1.5 text-sm text-zinc-100 focus:outline-none focus:border-red-500"
                 />
               </div>
 
