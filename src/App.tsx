@@ -57,6 +57,7 @@ export default function App() {
   const [formAntonyms, setFormAntonyms] = useState('');
   const [formCollocations, setFormCollocations] = useState('');
   const [formTags, setFormTags] = useState<string[]>([]);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -210,6 +211,24 @@ export default function App() {
     } else {
       setVocabData((prev) => prev.filter((item) => item.id !== id));
     }
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+
+    const { error } = await supabase
+      .from('vocab_items')
+      .delete()
+      .eq('id', deletingId);
+
+    if (error) {
+      console.error('Error deleting item:', error);
+      alert('刪除失敗：' + error.message);
+    } else {
+      setVocabData((prev) => prev.filter((item) => item.id !== deletingId));
+    }
+
+    setDeletingId(null); // 關閉 Modal
   };
 
   const filteredData = useMemo(() => {
@@ -371,8 +390,8 @@ export default function App() {
                     )
                   }
                   className={`px-2 py-0.5 rounded text-[11px] font-mono transition-all border cursor-pointer ${isSelected
-                      ? 'bg-blue-600/20 border-blue-500/40 text-blue-300'
-                      : 'bg-[#18191C] border-[#26282E] text-gray-400 hover:text-gray-200 hover:border-gray-700'
+                    ? 'bg-blue-600/20 border-blue-500/40 text-blue-300'
+                    : 'bg-[#18191C] border-[#26282E] text-gray-400 hover:text-gray-200 hover:border-gray-700'
                     }`}
                 >
                   #{tag}
@@ -414,14 +433,14 @@ export default function App() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-[#1A1C1F] border-b border-[#222429] text-[11px] font-mono tracking-wider uppercase">
-                  <th className="py-2.5 px-4 text-gray-400 w-[22%]">Meaning Group</th>
+                  <th className="py-2.5 px-4 text-gray-400 w-[14%]">Meaning Group</th>
                   <th className="py-2.5 px-3 text-blue-400 w-[11%]">Noun</th>
                   <th className="py-2.5 px-3 text-amber-400 w-[11%]">Verb</th>
                   <th className="py-2.5 px-3 text-teal-400 w-[11%]">Adj</th>
                   <th className="py-2.5 px-3 text-purple-400 w-[11%]">Adv</th>
-                  <th className="py-2.5 px-4 text-red-400 w-[15%]">Antonyms</th>
-                  <th className="py-2.5 px-4 text-gray-400 w-[24%]">Collocations & Usage</th>
-                  <th className="py-2.5 px-4 text-gray-400 w-[10%] text-right">Tags / Actions</th>
+                  <th className="py-2.5 px-4 text-red-400 w-[11%]">Antonyms</th>
+                  <th className="py-2.5 px-4 text-gray-400 w-[25%]">Collocations & Usage</th>
+                  <th className="py-2.5 px-4 text-gray-400 w-[3%] text-right">Tags / Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#222429]">
@@ -475,27 +494,27 @@ export default function App() {
                               key={row.id}
                               className="hover:bg-[#181A1C] transition-colors group border-b border-[#222429]/60"
                             >
-                              <td className="py-3 px-4 text-sm font-medium text-gray-200 align-top">
+                              <td className="py-3 px-4 text-sm font-medium text-gray-200 align-top whitespace-pre-line">
                                 {row.meaningGroup}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-blue-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-blue-400 align-top whitespace-pre-line">
                                 {row.noun || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-amber-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-amber-400 align-top whitespace-pre-line">
                                 {row.verb || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-teal-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-teal-400 align-top whitespace-pre-line">
                                 {row.adj || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-purple-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-purple-400 align-top whitespace-pre-line">
                                 {row.adv || <span className="text-gray-600">—</span>}
                               </td>
 
-                              <td className="py-3 px-3 text-sm font-mono text-red-400 align-top">
+                              <td className="py-3 px-3 text-sm font-mono text-red-400 align-top whitespace-pre-line">
                                 {row.antonyms || <span className="text-gray-600">—</span>}
                               </td>
 
@@ -545,7 +564,7 @@ export default function App() {
                                         <button
                                           onClick={() => {
                                             setActiveMenuId(null);
-                                            handleDelete(row.id);
+                                            setDeletingId(row.id);
                                           }}
                                           className="w-full px-3 py-1.5 text-sm text-red-400 hover:bg-[#222429] flex items-center gap-2 cursor-pointer"
                                         >
@@ -573,7 +592,7 @@ export default function App() {
       {/* Add / Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-[#141517] border border-[#26282E] w-full max-w-xl rounded-lg shadow-2xl overflow-hidden">
+          <div className="bg-[#141517] border border-[#26282E] w-full max-w-3xl rounded-lg shadow-2xl overflow-hidden">
 
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#222429] bg-[#18191C]">
               <div className="flex items-center gap-2">
@@ -616,8 +635,7 @@ export default function App() {
                   <label className="block text-[11px] font-mono text-gray-400 mb-1">
                     Meaning Group (Definition) *
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     required
                     value={formMeaning}
                     onChange={(e) => setFormMeaning(e.target.value)}
@@ -717,8 +735,8 @@ export default function App() {
                           )
                         }
                         className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 border transition-colors cursor-pointer ${isChecked
-                            ? 'bg-blue-600/30 border-blue-500 text-blue-300'
-                            : 'bg-[#1E2024] border-[#2C2E33] text-gray-400 hover:text-gray-200'
+                          ? 'bg-blue-600/30 border-blue-500 text-blue-300'
+                          : 'bg-[#1E2024] border-[#2C2E33] text-gray-400 hover:text-gray-200'
                           }`}
                       >
                         {isChecked && <Check className="w-2.5 h-2.5" />}
@@ -770,6 +788,29 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {deletingId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#141517] border border-[#26282E] p-6 rounded-lg max-w-sm w-full space-y-4 shadow-2xl">
+            <h3 className="text-sm font-semibold text-gray-200">Delete Vocabulary Entry?</h3>
+            <p className="text-xs text-gray-400">This action cannot be undone. Are you sure you want to proceed?</p>
+            <div className="flex justify-end space-x-3 pt-2">
+              <button
+                onClick={() => setDeletingId(null)}
+                className="px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-3 py-1.5 text-xs bg-rose-600 hover:bg-rose-500 text-white rounded transition shadow"
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
