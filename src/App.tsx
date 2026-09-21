@@ -200,19 +200,6 @@ export default function App() {
     setIsSaving(false);
   };
 
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase
-      .from('vocab_items')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Error deleting item:', error);
-    } else {
-      setVocabData((prev) => prev.filter((item) => item.id !== id));
-    }
-  };
-
   const confirmDelete = async () => {
     if (!deletingId) return;
 
